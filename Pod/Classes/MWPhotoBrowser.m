@@ -185,7 +185,7 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     
     // Swipe to dismiss
     if (_enableSwipeToDismiss) {
-        UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(doneButtonPressed:)];
+        UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissGrid:)];
         swipeGesture.direction = UISwipeGestureRecognizerDirectionDown | UISwipeGestureRecognizerDirectionUp;
         [self.view addGestureRecognizer:swipeGesture];
     }
@@ -1554,6 +1554,20 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 }
 
 #pragma mark - Misc
+
+- (void)dismissGrid:(id)sender {
+    NSLog(@"dismissGrid");
+
+    if (self.enableGrid) {
+        if (self.startOnGrid && !_gridController) {
+            [self showGrid:YES];
+            return;
+        } else if (!self.startOnGrid && _gridController) {
+            [self hideGrid];
+            return;
+        }
+    }
+}
 
 - (void)doneButtonPressed:(id)sender {
     // Only if we're modal and there's a done button
