@@ -15,7 +15,7 @@
     
     // Store margins for current setup
     CGFloat _margin, _gutter, _marginL, _gutterL, _columns, _columnsL;
-    
+
 }
 
 @end
@@ -165,10 +165,18 @@
     UIImage *img = [_browser imageForPhoto:photo];
     if (img) {
         [cell displayImage];
+
+        if ([_browser.delegate respondsToSelector:@selector(photoBrowser:customizeGridCell:)]) {
+            [_browser.delegate photoBrowser:_browser customizeGridCell:cell];
+        }
     } else {
         [photo loadUnderlyingImageAndNotify];
     }
     return cell;
+}
+
+- (void):customizeCell:(MWGridCell *)cell {
+
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {

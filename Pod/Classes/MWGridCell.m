@@ -237,6 +237,10 @@
         if ([photo underlyingImage]) {
             // Successful load
             [self displayImage];
+
+            if ([_gridController.browser.delegate respondsToSelector:@selector(photoBrowser:customizeGridCell:)]) {
+                [_gridController.browser.delegate photoBrowser:_gridController.browser customizeGridCell:self];
+            }
         } else {
             // Failed to load
             [self showImageFailure];
