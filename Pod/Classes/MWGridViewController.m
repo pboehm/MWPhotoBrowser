@@ -175,10 +175,6 @@
     return cell;
 }
 
-- (void):customizeCell:(MWGridCell *)cell {
-
-}
-
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [_browser setCurrentPhotoIndex:indexPath.row];
     [_browser hideGrid];
