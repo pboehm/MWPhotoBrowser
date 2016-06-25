@@ -1556,8 +1556,6 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 #pragma mark - Misc
 
 - (void)dismissGrid:(id)sender {
-    NSLog(@"dismissGrid");
-
     if (self.enableGrid) {
         if (self.startOnGrid && !_gridController) {
             [self showGrid:YES];
