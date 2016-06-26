@@ -1301,6 +1301,8 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 - (void)showGrid:(BOOL)animated {
 
     if (_gridController) return;
+
+    _doneButton.enabled = YES;
     
     // Clear video
     [self clearCurrentVideo];
@@ -1352,6 +1354,8 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 - (void)hideGrid {
     
     if (!_gridController) return;
+
+    _doneButton.enabled = NO;
     
     // Remember previous content offset
     _currentGridContentOffset = _gridController.collectionView.contentOffset;
