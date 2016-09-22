@@ -208,6 +208,10 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     _doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(globalActionButtonPressed:)];
     self.navigationItem.rightBarButtonItem = _doneButton;
 
+    if (!_enableGrid) {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+        self.navigationItem.rightBarButtonItem.tintColor = [UIColor clearColor];
+    }
 
     // Show back button
     UIViewController *previousViewController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count-2];
