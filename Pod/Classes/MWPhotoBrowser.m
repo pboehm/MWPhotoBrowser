@@ -629,6 +629,10 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     
 }
 
+- (void)reloadCollectionView {
+    [_gridController.collectionView reloadData];
+}
+
 - (NSUInteger)numberOfPhotos {
     if (_photoCount == NSNotFound) {
         if ([_delegate respondsToSelector:@selector(numberOfPhotosInPhotoBrowser:)]) {
