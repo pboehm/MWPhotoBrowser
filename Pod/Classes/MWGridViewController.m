@@ -6,6 +6,7 @@
 //
 //
 
+#import <math.h>
 #import "MWGridViewController.h"
 #import "MWGridCell.h"
 #import "MWPhotoBrowserPrivate.h"
@@ -49,6 +50,7 @@
         }
 
         _initialContentOffset = CGPointMake(0, CGFLOAT_MAX);
+        _indexPathOfLastPanGestureChange = nil;
  
     }
     return self;
@@ -61,6 +63,19 @@
     [self.collectionView registerClass:[MWGridCell class] forCellWithReuseIdentifier:@"GridCell"];
     self.collectionView.alwaysBounceVertical = YES;
     self.collectionView.backgroundColor = [UIColor darkGrayColor];
+
+    UIPanGestureRecognizer * recognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanToSelectCells:)];
+    recognizer.cancelsTouchesInView = NO;
+    recognizer.delegate = self;
+   [self.collectionView addGestureRecognizer:recognizer];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    return YES;
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    return YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -203,6 +218,45 @@
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
     CGFloat margin = [self getMargin];
     return UIEdgeInsetsMake(margin, margin, margin, margin);
+}
+
+- (void)didPanToSelectCells:(UIPanGestureRecognizer *)panGesture {
+    CGPoint velocity = [panGesture velocityInView:self.collectionView];
+
+    if (fabsf(velocity.y) > fabsf(velocity.x)) {
+        // if we have an up/down pan gesture it is probably a scroll gesture
+        [self.collectionView setScrollEnabled:YES];
+        return;
+    }
+
+    // Allow selecting multiple images using a single pan gesture over them
+    // based on http://stackoverflow.com/a/36580992
+
+    if (panGesture.state == UIGestureRecognizerStateBegan) {
+        [self.collectionView setUserInteractionEnabled:NO];
+        [self.collectionView setScrollEnabled:NO];
+
+    } else if (panGesture.state == UIGestureRecognizerStateChanged) {
+        CGPoint location = [panGesture locationInView:self.collectionView];
+
+        NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:location];
+        if (_indexPathOfLastPanGestureChange != nil && indexPath.row == _indexPathOfLastPanGestureChange.row) {
+            return;
+        }
+        _indexPathOfLastPanGestureChange = indexPath;
+
+        BOOL selectedState = [_browser photoIsSelectedAtIndex:(NSUInteger) indexPath.row];
+
+        [_browser setPhotoSelected:!selectedState atIndex:(NSUInteger) indexPath.row];
+
+        MWGridCell *cell = (MWGridCell *) [self.collectionView cellForItemAtIndexPath:indexPath];
+        [cell setIsSelected:!selectedState];
+
+    } else if (panGesture.state == UIGestureRecognizerStateEnded) {
+        _indexPathOfLastPanGestureChange = nil;
+        [self.collectionView setScrollEnabled:YES];
+        [self.collectionView setUserInteractionEnabled:YES];
+    }
 }
 
 @end

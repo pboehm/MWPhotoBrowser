@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "MWPhotoBrowser.h"
 
-@interface MWGridViewController : UICollectionViewController {}
+@interface MWGridViewController : UICollectionViewController <UIGestureRecognizerDelegate> {}
 
 @property (nonatomic, assign) MWPhotoBrowser *browser;
 @property (nonatomic) BOOL selectionMode;
 @property (nonatomic) CGPoint initialContentOffset;
+@property (nonatomic) NSIndexPath *indexPathOfLastPanGestureChange;
 
 - (void)adjustOffsetsAsRequired;
 
