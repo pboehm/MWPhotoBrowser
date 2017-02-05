@@ -223,7 +223,7 @@
 - (void)didPanToSelectCells:(UIPanGestureRecognizer *)panGesture {
     CGPoint velocity = [panGesture velocityInView:self.collectionView];
 
-    if (fabsf(velocity.y) > fabsf(velocity.x)) {
+    if (_indexPathOfLastPanGestureChange == nil && fabsf(velocity.y) > fabsf(velocity.x)) {
         // if we have an up/down pan gesture it is probably a scroll gesture
         [self.collectionView setScrollEnabled:YES];
         return;
