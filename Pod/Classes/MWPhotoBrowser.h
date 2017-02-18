@@ -32,7 +32,7 @@
 - (NSString *)photoBrowser:(MWPhotoBrowser *)photoBrowser titleForPhotoAtIndex:(NSUInteger)index;
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser didDisplayPhotoAtIndex:(NSUInteger)index;
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser actionButtonPressedForPhotoAtIndex:(NSUInteger)index withSender:(id)sender;
-- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser longPressOnPhotoAtIndex:(NSUInteger)index atCell:(UICollectionViewCell *)cell inCollectionView:(UICollectionView *)view;
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser longPressOnPhotoAtIndex:(NSUInteger)index atCell:(UICollectionViewCell *)cell inCollectionView:(UICollectionView *)view inNavigationController:(UINavigationController *)navigation;
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser gridActionButtonPressedWithSender:(id)sender;
 - (BOOL)photoBrowser:(MWPhotoBrowser *)photoBrowser isPhotoSelectedAtIndex:(NSUInteger)index;
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected;

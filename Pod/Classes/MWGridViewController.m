@@ -277,8 +277,8 @@
         return;
     }
 
-    if ([self.browser.delegate respondsToSelector:@selector(photoBrowser:longPressOnPhotoAtIndex:atCell:inCollectionView:)]) {
-        [self.browser.delegate photoBrowser:self.browser longPressOnPhotoAtIndex:(NSUInteger) indexPath.row atCell:cell inCollectionView:self.collectionView];
+    if ([self.browser.delegate respondsToSelector:@selector(photoBrowser:longPressOnPhotoAtIndex:atCell:inCollectionView:inNavigationController:)]) {
+        [self.browser.delegate photoBrowser:self.browser longPressOnPhotoAtIndex:(NSUInteger) indexPath.row atCell:cell inCollectionView:self.collectionView inNavigationController:self.navigationController];
     }
 }
 
