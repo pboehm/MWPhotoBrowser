@@ -13,7 +13,7 @@
 #import "MWCommon.h"
 
 @interface MWGridViewController () {
-    
+
     // Store margins for current setup
     CGFloat _margin, _gutter, _marginL, _gutterL, _columns, _columnsL;
 
@@ -25,12 +25,12 @@
 
 - (id)init {
     if ((self = [super initWithCollectionViewLayout:[UICollectionViewFlowLayout new]])) {
-        
+
         // Defaults
         _columns = 3, _columnsL = 4;
         _margin = 0, _gutter = 1;
         _marginL = 0, _gutterL = 1;
-        
+
         // For pixel perfection...
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             // iPad
@@ -51,7 +51,7 @@
 
         _initialContentOffset = CGPointMake(0, CGFLOAT_MAX);
         _indexPathOfLastPanGestureChange = nil;
- 
+
     }
     return self;
 }
@@ -64,10 +64,16 @@
     self.collectionView.alwaysBounceVertical = YES;
     self.collectionView.backgroundColor = [UIColor darkGrayColor];
 
-    UIPanGestureRecognizer * recognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanToSelectCells:)];
-    recognizer.cancelsTouchesInView = NO;
-    recognizer.delegate = self;
-   [self.collectionView addGestureRecognizer:recognizer];
+    UIPanGestureRecognizer * panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanToSelectCells:)];
+    panGesture.cancelsTouchesInView = NO;
+    panGesture.delegate = self;
+    [self.collectionView addGestureRecognizer:panGesture];
+
+    UILongPressGestureRecognizer * longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPressOnCell:)];
+    longPressGesture.cancelsTouchesInView = YES;
+    longPressGesture.allowableMovement = 100.0f;
+    panGesture.delegate = self;
+    [self.collectionView addGestureRecognizer:longPressGesture];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
@@ -99,13 +105,13 @@
 }
 
 - (void)adjustOffsetsAsRequired {
-    
+
     // Move to previous content offset
     if (_initialContentOffset.y != CGFLOAT_MAX) {
         self.collectionView.contentOffset = _initialContentOffset;
         [self.collectionView layoutIfNeeded]; // Layout after content offset change
     }
-    
+
     // Check if current item is visible and if not, make it so!
     if (_browser.numberOfPhotos > 0) {
         NSIndexPath *currentPhotoIndexPath = [NSIndexPath indexPathForItem:_browser.currentIndex inSection:0];
@@ -121,7 +127,7 @@
             [self.collectionView scrollToItemAtIndexPath:currentPhotoIndexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
         }
     }
-    
+
 }
 
 - (void)performLayout {
@@ -256,6 +262,23 @@
         _indexPathOfLastPanGestureChange = nil;
         [self.collectionView setScrollEnabled:YES];
         [self.collectionView setUserInteractionEnabled:YES];
+    }
+}
+
+- (void)didLongPressOnCell:(UILongPressGestureRecognizer *)longPressGesture {
+    if (longPressGesture.state != UIGestureRecognizerStateBegan) {
+        return;
+    }
+
+    CGPoint location = [longPressGesture locationInView:self.collectionView];
+    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:location];
+    MWGridCell *cell = (MWGridCell *) [self.collectionView cellForItemAtIndexPath:indexPath];
+    if (cell == nil) {
+        return;
+    }
+
+    if ([self.browser.delegate respondsToSelector:@selector(photoBrowser:longPressOnPhotoAtIndex:withCell:)]) {
+        [self.browser.delegate photoBrowser:self.browser longPressOnPhotoAtIndex:(NSUInteger) indexPath.row withCell:cell];
     }
 }
 
