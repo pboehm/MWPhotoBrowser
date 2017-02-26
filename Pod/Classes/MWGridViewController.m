@@ -227,6 +227,11 @@
 }
 
 - (void)didPanToSelectCells:(UIPanGestureRecognizer *)panGesture {
+    if (!_browser.displaySelectionButtons) {
+        [self.collectionView setScrollEnabled:YES];
+        return;
+    }
+
     CGPoint velocity = [panGesture velocityInView:self.collectionView];
 
     if (_indexPathOfLastPanGestureChange == nil && fabsf(velocity.y) > fabsf(velocity.x)) {
