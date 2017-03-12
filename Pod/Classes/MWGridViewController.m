@@ -253,28 +253,42 @@
     if (panGesture.state == UIGestureRecognizerStateBegan) {
         [self.collectionView setUserInteractionEnabled:NO];
         [self.collectionView setScrollEnabled:NO];
+        _selectionChangedForFirstCellOfPanGesture = NO;
 
     } else if (panGesture.state == UIGestureRecognizerStateChanged) {
         CGPoint location = [panGesture locationInView:self.collectionView];
 
+        // To be less fragile we require the pan gesture to span two cells in minimum. When we reach the second cell
+        // we will change the selection state for the cell where the gesture was started.
         NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:location];
-        if (_indexPathOfLastPanGestureChange != nil && indexPath.row == _indexPathOfLastPanGestureChange.row) {
-            return;
+        if (_indexPathOfLastPanGestureChange != nil) {
+            if (indexPath.row == _indexPathOfLastPanGestureChange.row) {
+                return;
+            } else if (!_selectionChangedForFirstCellOfPanGesture) {
+                [self changeSelection:_indexPathOfLastPanGestureChange];
+                _selectionChangedForFirstCellOfPanGesture = YES;
+            }
         }
         _indexPathOfLastPanGestureChange = indexPath;
 
-        BOOL selectedState = [_browser photoIsSelectedAtIndex:(NSUInteger) indexPath.row];
-
-        [_browser setPhotoSelected:!selectedState atIndex:(NSUInteger) indexPath.row];
-
-        MWGridCell *cell = (MWGridCell *) [self.collectionView cellForItemAtIndexPath:indexPath];
-        [cell setIsSelected:!selectedState];
+        if (_selectionChangedForFirstCellOfPanGesture) {
+            [self changeSelection:indexPath];
+        }
 
     } else if (panGesture.state == UIGestureRecognizerStateEnded) {
         _indexPathOfLastPanGestureChange = nil;
+        _selectionChangedForFirstCellOfPanGesture = NO;
         [self.collectionView setScrollEnabled:YES];
         [self.collectionView setUserInteractionEnabled:YES];
     }
+}
+
+- (void)changeSelection:(NSIndexPath *)indexPath {
+    BOOL selectedState = [_browser photoIsSelectedAtIndex:(NSUInteger) indexPath.row];
+    [_browser setPhotoSelected:!selectedState atIndex:(NSUInteger) indexPath.row];
+
+    MWGridCell *cell = (MWGridCell *) [self.collectionView cellForItemAtIndexPath:indexPath];
+    [cell setIsSelected:!selectedState];
 }
 
 - (void)didLongPressOnCell:(UILongPressGestureRecognizer *)longPressGesture {

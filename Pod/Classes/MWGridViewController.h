@@ -15,6 +15,7 @@
 @property (nonatomic) BOOL selectionMode;
 @property (nonatomic) CGPoint initialContentOffset;
 @property (nonatomic) NSIndexPath *indexPathOfLastPanGestureChange;
+@property (nonatomic) BOOL selectionChangedForFirstCellOfPanGesture;
 
 - (void)adjustOffsetsAsRequired;
 
