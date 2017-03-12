@@ -214,18 +214,9 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     }
 
     // Show back button
-    UIViewController *previousViewController = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count-2];
-    NSString *backButtonTitle = previousViewController.navigationItem.backBarButtonItem ? previousViewController.navigationItem.backBarButtonItem.title : previousViewController.title;
-    UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle:backButtonTitle style:UIBarButtonItemStylePlain target:nil action:nil];
-    // Appearance
-    [newBackButton setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [newBackButton setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
-    [newBackButton setBackButtonBackgroundImage:nil forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
-    [newBackButton setBackButtonBackgroundImage:nil forState:UIControlStateHighlighted barMetrics:UIBarMetricsLandscapePhone];
-    [newBackButton setTitleTextAttributes:[NSDictionary dictionary] forState:UIControlStateNormal];
-    [newBackButton setTitleTextAttributes:[NSDictionary dictionary] forState:UIControlStateHighlighted];
-    _previousViewControllerBackButton = previousViewController.navigationItem.backBarButtonItem; // remember previous
-    previousViewController.navigationItem.backBarButtonItem = newBackButton;
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                                          target:self
+                                                                                          action:@selector(goBack)];
 
 
     // Toolbar items
@@ -288,6 +279,14 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     [self tilePages];
     _performingLayout = NO;
     
+}
+
+- (void)goBack {
+    if (_enableGrid && !_gridController) {
+        [self showGrid:YES];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 // Release any retained subviews of the main view.
