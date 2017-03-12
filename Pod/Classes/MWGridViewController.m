@@ -197,7 +197,14 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [_browser setCurrentPhotoIndex:indexPath.row];
+    // ask delegate if we should open image
+    if ([_browser.delegate respondsToSelector:@selector(photoBrowser:shouldDisplaySelectedPhotoAtIndex:inNavigationController:)]) {
+        if (![_browser.delegate photoBrowser:_browser shouldDisplaySelectedPhotoAtIndex:(NSUInteger) indexPath.row inNavigationController:self.navigationController]) {
+            return;
+        }
+    }
+
+    [_browser setCurrentPhotoIndex:(NSUInteger) indexPath.row];
     [_browser hideGrid];
 }
 

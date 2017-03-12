@@ -37,6 +37,7 @@
 - (BOOL)photoBrowser:(MWPhotoBrowser *)photoBrowser isPhotoSelectedAtIndex:(NSUInteger)index;
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index selectedChanged:(BOOL)selected;
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser customizeGridCell:(UICollectionViewCell *)cell;
+- (BOOL)photoBrowser:(MWPhotoBrowser *)photoBrowser shouldDisplaySelectedPhotoAtIndex:(NSUInteger)index inNavigationController:(UINavigationController *)navigationController;
 - (void)photoBrowserDidFinishModalPresentation:(MWPhotoBrowser *)photoBrowser;
 
 @end
