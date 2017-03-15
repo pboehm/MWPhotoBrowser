@@ -278,7 +278,12 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 	_pagingScrollView.contentOffset = [self contentOffsetForPageAtIndex:_currentPageIndex];
     [self tilePages];
     _performingLayout = NO;
-    
+
+    if (_gridController) {
+        [self.view insertSubview:_toolbar belowSubview:_gridController.view];
+    } else {
+        [self.view addSubview:_toolbar];
+    }
 }
 
 - (void)goBack {
@@ -625,7 +630,7 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
         [self performLayout];
         [self.view setNeedsLayout];
     }
-    
+
 }
 
 - (void)reloadCollectionView {
