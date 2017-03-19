@@ -258,9 +258,13 @@
     } else if (panGesture.state == UIGestureRecognizerStateChanged) {
         CGPoint location = [panGesture locationInView:self.collectionView];
 
+        NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:location];
+        if (indexPath == nil) {
+            return;
+        }
+
         // To be less fragile we require the pan gesture to span two cells in minimum. When we reach the second cell
         // we will change the selection state for the cell where the gesture was started.
-        NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:location];
         if (_indexPathOfLastPanGestureChange != nil) {
             if (indexPath.row == _indexPathOfLastPanGestureChange.row) {
                 return;
@@ -284,10 +288,13 @@
 }
 
 - (void)changeSelection:(NSIndexPath *)indexPath {
+    MWGridCell *cell = (MWGridCell *) [self.collectionView cellForItemAtIndexPath:indexPath];
+    if (cell == nil) {
+        return;
+    }
+
     BOOL selectedState = [_browser photoIsSelectedAtIndex:(NSUInteger) indexPath.row];
     [_browser setPhotoSelected:!selectedState atIndex:(NSUInteger) indexPath.row];
-
-    MWGridCell *cell = (MWGridCell *) [self.collectionView cellForItemAtIndexPath:indexPath];
     [cell setIsSelected:!selectedState];
 }
 
