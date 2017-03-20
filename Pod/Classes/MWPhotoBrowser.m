@@ -1315,6 +1315,7 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     if (_gridController) return;
 
     _doneButton.enabled = YES;
+    _doneButton.tintColor = nil;
     
     // Clear video
     [self clearCurrentVideo];
@@ -1368,6 +1369,7 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     if (!_gridController) return;
 
     _doneButton.enabled = NO;
+    _doneButton.tintColor = UIColor.clearColor;
     
     // Remember previous content offset
     _currentGridContentOffset = _gridController.collectionView.contentOffset;
