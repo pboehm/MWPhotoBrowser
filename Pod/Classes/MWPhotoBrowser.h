@@ -78,4 +78,8 @@
 - (void)showNextPhotoAnimated:(BOOL)animated;
 - (void)showPreviousPhotoAnimated:(BOOL)animated;
 
+// Grid
+
+- (void)showPhotoBrowserInGridMode:(BOOL)animated;
+
 @end

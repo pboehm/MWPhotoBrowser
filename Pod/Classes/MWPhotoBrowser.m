@@ -1149,6 +1149,11 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     [self jumpToPageAtIndex:_currentPageIndex-1 animated:animated];
 }
 
+- (void)showPhotoBrowserInGridMode:(BOOL)animated {
+    [self showGrid:animated];
+}
+
+
 - (void)showNextPhotoAnimated:(BOOL)animated {
     [self jumpToPageAtIndex:_currentPageIndex+1 animated:animated];
 }
