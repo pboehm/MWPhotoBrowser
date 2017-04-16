@@ -30,4 +30,6 @@
 // the full width of the screen
 - (CGSize)sizeThatFits:(CGSize)size;
 
+- (void)updateCaption;
+
 @end

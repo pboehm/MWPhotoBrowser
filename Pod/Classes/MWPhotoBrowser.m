@@ -637,6 +637,13 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     [_gridController.collectionView reloadData];
 }
 
+- (void)reloadPhotoDetailView {
+    for (MWZoomingScrollView *page in _visiblePages) {
+        [page.captionView updateCaption];
+    }
+}
+
+
 - (NSUInteger)numberOfPhotos {
     if (_photoCount == NSNotFound) {
         if ([_delegate respondsToSelector:@selector(numberOfPhotosInPhotoBrowser:)]) {
