@@ -637,6 +637,13 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
     [_gridController.collectionView reloadData];
 }
 
+- (void)scrollToPhotoIndex:(NSUInteger)index {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:0];
+    [_gridController.collectionView scrollToItemAtIndexPath:indexPath
+                                           atScrollPosition:UICollectionViewScrollPositionCenteredVertically
+                                                   animated:true];
+}
+
 - (void)reloadPhotoDetailView {
     for (MWZoomingScrollView *page in _visiblePages) {
         [page.captionView updateCaption];

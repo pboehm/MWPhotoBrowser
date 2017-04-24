@@ -71,6 +71,8 @@
 
 - (void)reloadCollectionView;
 
+- (void)scrollToPhotoIndex:(NSUInteger)index;
+
 - (void)reloadPhotoDetailView;
 
 // Set page that photo browser starts on
